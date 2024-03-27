@@ -97,11 +97,11 @@ class _MyAppState extends State<MyApp>{
                           final value = obtainedData[key];
                           final suffix = switch(index){
                              0 => " °C",
-                             1 => " M",
-                             2 => ' °C Td',
-                             3 => ' %',
-                             4 => ' ATM',
-                             5 => ' NITTS',
+                             1 => " ATM",
+                             2 => ' M',
+                             3 => ' NITTS',
+                             4 => ' %',
+                             5 => ' °C Td',
                              6 => '', //Rain doesn't need any units it's only 'RAINING' or 'NOT-RAINING'
                             // TODO: Handle anonymous case.
                             int() => null,
