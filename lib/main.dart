@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'model.dart';
 
-//basic fllutter app
+//basic flutter app
 void main(){
   runApp(const MyApp());
 }
@@ -35,13 +35,13 @@ class _MyAppState extends State<MyApp>{
 
   void updateData() async{
     obtainedData = await Model().fetchData();
-    if(obtainedData['rain'] == 1){
+    if(obtainedData['Rain'] == 1){
       referencePath = "${imagePath}drizzle.png";
     }
-    else if(obtainedData['humidity']! > 85){
+    else if(obtainedData['Humidity']! > 85){
       referencePath = "${imagePath}drizzle.png";
     }
-    else if(obtainedData['humidity']! <= 85 && obtainedData['humidity']! > 40){
+    else if(obtainedData['Humidity']! <= 85 && obtainedData['Humidity']! > 40){
       referencePath = "${imagePath}cloudy.png";
     }
     else{
@@ -49,10 +49,10 @@ class _MyAppState extends State<MyApp>{
     }
 
     //Altitude correction
-    obtainedData['altitude'] = 44330*(1 - pow(((obtainedData['pressure']!/100)/1013.25), 1/5.255)) as double;
+    obtainedData['Altitude'] = 44330*(1 - pow(((obtainedData['Pressure']!/100)/1013.25), 1/5.255)) as double;
 
     //Pressure correction
-    obtainedData['pressure'] = obtainedData['pressure']! * (0.00098692/100);
+    obtainedData['Pressure'] = obtainedData['Pressure']! * (0.00098692/100);
 
     setState(() {
       isLoading = false;
@@ -85,137 +85,53 @@ class _MyAppState extends State<MyApp>{
               Center(
                 child: Image.asset(referencePath, width: 150, height: 150,),
               ),
+
               //Data widgets
-              Column(
-
-                children: [
-                  //Temperature widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Temperature:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['temperature']}°C"),
-                        ),
-                      ],
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                          final key = obtainedData.keys.elementAt(index);
+                          final value = obtainedData[key];
+                          final suffix = switch(index){
+                             0 => " °C",
+                             1 => " M",
+                             2 => ' °C Td',
+                             3 => ' %',
+                             4 => ' ATM',
+                             5 => ' NITTS',
+                             6 => '', //Rain doesn't need any units it's only 'RAINING' or 'NOT-RAINING'
+                            // TODO: Handle anonymous case.
+                            int() => null,
+                          };
+                          return Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.2,
+                                    child: Text("$key:"),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width*0.3,
+                                      child: Text("  $value$suffix"),
+                                    ),
+                                  ],
+                              ),
+                            );
+                          },
+                        childCount: obtainedData.length,
+                      ),
                     ),
-                  ),
-                  //Altitude widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Altitude:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['altitude']?.toStringAsFixed(3)}M"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //Dew point widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Dew point:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['dew point']}°C Td"),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  //Humidity widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Humidity:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['humidity']}%"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //Pressure widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Pressure:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['pressure']?.toStringAsFixed(3)}ATM"),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  //Light intensity widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Light intensity:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['light intensity']}NITTS"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //Rain widget
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: const Text("Rain:"),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Text("  ${obtainedData['rain']}"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+              ),
             ],
           )
         ),
     );
   }
-
 }

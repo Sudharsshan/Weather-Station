@@ -4,13 +4,13 @@ import 'package:http/http.dart' as http;
 class Model {
 
   Map<String, double> gatheredData = {
-    'temperature' : 0.0,
-    'pressure' : 0.0,
-    'altitude' : 0.0,
-    'light intensity' : 0.0,
-    'dew point' : 0.0,
-    'humidity' : 0.0,
-    'rain' : 0
+    'Temperature' : 0.0,
+    'Pressure' : 0.0,
+    'Altitude' : 0.0,
+    'Light intensity' : 0.0,
+    'Dew point' : 0.0,
+    'Humidity' : 0.0,
+    'Rain' : 0
   };
 
   String apiLink = "https://io.adafruit.com/api/v2/SudharsshanSY/feeds/";
@@ -27,26 +27,26 @@ class Model {
           final data = json.decode(response.body);
           final lastValue = double.parse(data['last_value'] as String);
           switch(i){
-            case 0: gatheredData['altitude'] = lastValue;
-            print("Altitude: ${gatheredData['altitude']}");
+            case 0: gatheredData['Altitude'] = lastValue;
+            print("Altitude: ${gatheredData['Altitude']}");
             break;
-            case 1: gatheredData['dew point'] = lastValue;
-            print("Dew Point: ${gatheredData['dew point']}");
+            case 1: gatheredData['Dew point'] = lastValue;
+            print("Dew Point: ${gatheredData['Dew point']}");
             break;
-            case 2: gatheredData['humidity'] = lastValue;
-            print("Humidity: ${gatheredData['humidity']}");
+            case 2: gatheredData['Humidity'] = lastValue;
+            print("Humidity: ${gatheredData['Humidity']}");
             break;
-            case 3: gatheredData['light intensity'] = lastValue;
-            print("Light Intensity: ${gatheredData['light intensity']}");
+            case 3: gatheredData['Light intensity'] = lastValue;
+            print("Light Intensity: ${gatheredData['Light intensity']}");
             break;
-            case 4: gatheredData['pressure'] = lastValue;
-            print("Pressure: ${gatheredData['pressure']}");
+            case 4: gatheredData['Pressure'] = lastValue;
+            print("Pressure: ${gatheredData['Pressure']}");
             break;
-            case 5: gatheredData['rain'] = lastValue;
-            print("Rain: ${gatheredData['rain']}");
+            case 5: gatheredData['Rain'] = lastValue;
+            print("Rain: ${gatheredData['Rain']}");
             break;
-            case 6: gatheredData['temperature'] = lastValue;
-            print("Temperature: ${gatheredData['temperature']}");
+            case 6: gatheredData['Temperature'] = lastValue;
+            print("Temperature: ${gatheredData['Temperature']}");
             break;
             default: if (kDebugMode) {
               print("SWITCH ERROR: WRONG PARAMETER");
