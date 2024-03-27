@@ -112,11 +112,9 @@ class _MyAppState extends State<MyApp>{
                               child: Row(
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width*0.2,
-                                    child: Text("$key:"),
+                                    child: Text("$key: "),
                                     ),
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width*0.3,
                                       child: Text("  $value$suffix"),
                                     ),
                                   ],
