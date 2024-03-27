@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'model.dart';
 
+//basic fllutter app
 void main(){
   runApp(const MyApp());
 }
